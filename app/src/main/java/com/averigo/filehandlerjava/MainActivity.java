@@ -1,5 +1,6 @@
 package com.averigo.filehandlerjava;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -17,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -45,9 +47,10 @@ public class MainActivity extends AppCompatActivity {
         btnUpload = findViewById(R.id.uploadButton);
 
         btnUpload.setOnClickListener(v -> {
-            String fileContent = "This is the content of my text file";
+            /*String fileContent = "This is the content of my text file";
             fileName = generateFileText();
             File file = new File(getApplicationContext().getCacheDir(), fileName + ".txt");
+
 
             try {
                 FileWriter writer = new FileWriter(file);
@@ -56,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
                 writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
+
+            File file = getFileFromAssets(this, "Grab_Scan_GoTIMEBOUND200SeatsLicense062624.jsl");
 
             RequestBody requestFile = RequestBody.create(MediaType.parse("text/plain"), file);
             MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
@@ -187,5 +192,26 @@ public class MainActivity extends AppCompatActivity {
         String randomString = generateRandomString(4);
         return "TXT_" + dateTime + randomString;
     }
+
+    public File getFileFromAssets(Context context, String fileName) {
+        File file = new File(context.getCacheDir(), fileName); // Store file in cache
+
+        try (InputStream inputStream = context.getAssets().open(fileName);
+             OutputStream outputStream = new FileOutputStream(file)) {
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            outputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return file;
+    }
+
 
 }
