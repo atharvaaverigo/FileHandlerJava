@@ -90,10 +90,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnDownload.setOnClickListener(v -> {
+            fileName = "Grab_Scan_GoTIMEBOUND200SeatsLicense062624.jsl";
             if (!fileName.isEmpty()) {
                 Call<ResponseBody> dwCall = instance.downloadFile(
                         "8a9R7mNcA3eLxuQlVLUtei5SDm7iXGKLG7FSKOEgS94UEexChOaWBDU3Kl3O",
-                        fileName + ".txt"
+                        fileName// + ".txt"
                 );
 
                 dwCall.enqueue(new retrofit2.Callback<ResponseBody>() {
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                             String documentsPath = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath();
                             String dirPath = getApplicationContext().getExternalFilesDir(null).getAbsolutePath();
                             String filePath = dirPath;
-                            saveFile(res, filePath, fileName + ".txt");
+                            saveFile(res, filePath, fileName);
                             Log.d("fileNameA", filePath + "/" + fileName + ".txt");
                         } else {
                             Toast.makeText(getApplicationContext(), "Error: " + response.message(), Toast.LENGTH_SHORT).show();
